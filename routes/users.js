@@ -6,7 +6,7 @@ const jsonschema = require('jsonschema');
 
 const express = require("express");
 const { ensureCorrectUserOrAdmin, ensureAdmin } = require("../middleware/auth");
-const { BadRequesetError } = require("../expressError");
+const { BadRequestError } = require("../expressError");
 const User = require("../models/user");
 const { createToken } = require("../helpers/tokens");
 const userUpdateSchema = require("../schemas/userUpdate.json");
@@ -20,7 +20,7 @@ const router = express.Router();
  *
  * Authorization required: admin or same user-as-:username
  **/
-router.get('/:username',  ensureCorrectUserOrAdmin, async function (req, res, next) {
+router.get('/:username', ensureCorrectUserOrAdmin, async function (req, res, next) {
     try {
         const user = await User.get(req.params.username);
         return res.json({ user });
@@ -43,7 +43,7 @@ router.patch('/:username', ensureCorrectUserOrAdmin, async function (req, res, n
         const validator = jsonschema.validate(req.body, userUpdateSchema);
         if (!validator.valid) {
             const errs = validator.errors.map(e => e.stack);
-            throw new BadRequesetError(errs);
+            throw new BadRequestError(errs);
         }
 
         const user = await User.update(req.params.username, req.body);
