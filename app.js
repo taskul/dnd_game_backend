@@ -8,8 +8,9 @@ const cors = require('cors');
 const { NotFoundError } = require('./expressError');
 
 const { authenticateJWT } = require('./middleware/auth');
-const  authRoutes = require("./routes/auth");
+const authRoutes = require("./routes/auth");
 const usersRoutes = require("./routes/users");
+const mapRoutes = require('./routes/maps');
 
 const morgan = require("morgan");
 
@@ -34,6 +35,7 @@ app.get('/', function (req, res) {
 // routes
 app.use("/auth", authRoutes);
 app.use("/users", usersRoutes);
+app.use('/maps', mapRoutes);
 
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {
@@ -47,7 +49,7 @@ app.use(function (err, req, res, next) {
     const message = err.message;
 
     return res.status(status).json({
-        error: {message, status},
+        error: { message, status },
     });
 });
 

@@ -4,7 +4,7 @@
 
 const jsonschema = require("jsonschema");
 
-const User = require('../models/user');
+const User = require('../models/User');
 const express = require("express")
 const router = new express.Router();
 const { createToken } = require("../helpers/tokens");
@@ -20,7 +20,6 @@ const { BadRequestError } = require("../expressError");
  */
 
 router.post("/login", async function (req, res, next) {
-  console.log("BOD", req.body)
   try {
     const validator = jsonschema.validate(req.body, userAuthSchema);
     if (!validator.valid) {

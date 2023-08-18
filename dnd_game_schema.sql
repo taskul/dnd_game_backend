@@ -20,6 +20,7 @@ CREATE TABLE guild (
 CREATE TABLE game_map (
     game_map_id SERIAL PRIMARY KEY,
     map_name VARCHAR(30) NOT NULL, 
+    username VARCHAR(25) NOT NULL,
     map_assets JSON
 );
 
