@@ -27,11 +27,11 @@ router.get('/:map_id', ensureCorrectUserOrAdmin, async function (req, res, next)
     }
 })
 
-router.post("/create", ensureCorrectUserOrAdmin, async function (req, res, next) {
-    console.log(req)
+router.post("/create", async function (req, res, next) {
     try {
-        const { mapName, username, assets } = req.body;
-        const newMap = await GameMaps.createMap(mapName, username, assets);
+        console.log(req.body)
+        const { mapName, username, map_assets } = req.body;
+        const newMap = await GameMaps.createMap(mapName, username, map_assets);
         return res.status(201).json({ mapName });
     } catch (err) {
         return next(err);

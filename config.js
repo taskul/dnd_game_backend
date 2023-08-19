@@ -7,8 +7,9 @@ require("dotenv").config();
 const SECRET_KEY = process.env.SECRET_KEY || "dloea031ladfakd#Dx*7D4!hM82P@xtZ8uW";
 
 const PORT = +process.env.PORT || 3001;
-const DB_USER = process.env.USERNAME;
-const DB_PASS = process.env.PASSWORD;
+const DB_USER = process.env.USERNAME || '';
+const DB_PASS = process.env.PASSWORD || '';
+
 
 // Use dev database, testing database, or via env var, production database
 function getDatabaseUri() {
@@ -21,6 +22,8 @@ function getDatabaseUri() {
 //
 // WJB: Evaluate in 2021 if this should be increased to 13 for non-test use
 const BCRYPT_WORK_FACTOR = process.env.NODE_ENV === "test" ? 1 : 12;
+
+console.log(`postgresql://${DB_USER}:${DB_PASS}@localhost:5432/dnd_game`)
 
 module.exports = {
     SECRET_KEY,

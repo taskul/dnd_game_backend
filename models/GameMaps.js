@@ -10,7 +10,7 @@ const {
 class GameMaps {
     static async getMap(mapName, username) {
         const response = await db.query(
-            `SELECT assets
+            `SELECT map_assets
             FROM game_map
             WHERE map_name = $1 AND username = $2`,
             [
@@ -24,7 +24,7 @@ class GameMaps {
 
     static async getMapById(mapId) {
         const response = await db.query(
-            `SELECT assets
+            `SELECT map_assets
             FROM game_map
             WHERE game_map_id = $1`,
             [mapId]
@@ -38,14 +38,14 @@ class GameMaps {
             `INSERT INTO game_map
                 (map_name,
                  username,
-                 assets)
+                 map_assets)
             VALUES ($1, $2, $3)
-            RETURNING map_name`,
+            RETURNING map_name, map_assets`,
             [mapName, username, assets]
         )
 
-        const mapName = result.row[0]
-        return mapName;
+        const map_name = result.rows[0]
+        return map_name;
     }
 }
 
