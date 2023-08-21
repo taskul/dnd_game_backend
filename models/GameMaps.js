@@ -8,17 +8,14 @@ const {
 } = require("../expressError");
 
 class GameMaps {
-    static async getMap(mapName, username) {
+    static async getMap(username) {
         const response = await db.query(
-            `SELECT map_assets
+            `SELECT game_map_id, map_name, map_assets
             FROM game_map
-            WHERE map_name = $1 AND username = $2`,
-            [
-                mapName.toLowerCase(),
-                username.toLowerCase()
-            ]
+            WHERE username = $1`,
+            [username.toLowerCase()]
         )
-        const mapAssets = response.rows[0];
+        const mapAssets = response.rows;
         return mapAssets;
     }
 
