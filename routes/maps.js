@@ -9,13 +9,11 @@ const GameMaps = require("../models/GameMaps");
 
 const router = express.Router();
 
-router.get('/', async function (req, res, next) {
+router.get('/:username', ensureLoggedIn, async function (req, res, next) {
     try {
-        const { username } = req.body;
+        const { username } = req.params;
         const response = await GameMaps.getMap(username);
-        console.log('THIS IS RESPONSE', response)
         return res.json({ response });
-        // return response
     } catch (err) {
         return next(err);
     }
@@ -32,10 +30,15 @@ router.get('/:map_id', ensureCorrectUserOrAdmin, async function (req, res, next)
 
 router.post("/create", async function (req, res, next) {
     try {
-        console.log(req.body)
-        const { map_name, username, map_assets } = req.body;
-        const newMap = await GameMaps.createMap(map_name, username, map_assets);
-        return res.status(201).json({ success: "Map was created" });
+        let { map_name, username, map_assets } = req.body;
+        const mapExists = await GameMaps.checkExistingMap(map_name, username)
+        if (mapExists) {
+            const newMap = await GameMaps.updateExistingMap(map_name, username, map_assets);
+            return res.status(201).json({ success: "Map was updated" });
+        } else {
+            const newMap = await GameMaps.createMap(map_name, username, map_assets);
+            return res.status(201).json({ success: "Map was created" });
+        }
     } catch (err) {
         return next(err);
     };

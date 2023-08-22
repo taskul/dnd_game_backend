@@ -10,13 +10,24 @@ const {
 class GameMaps {
     static async getMap(username) {
         const response = await db.query(
-            `SELECT game_map_id, map_name, map_assets
+            `SELECT game_map_id, map_name
             FROM game_map
             WHERE username = $1`,
             [username.toLowerCase()]
         )
-        const mapAssets = response.rows;
-        return mapAssets;
+        const mapInfo = response.rows;
+        return mapInfo;
+    }
+
+    static async checkExistingMap(map_name, username) {
+        const response = await db.query(
+            `SELECT game_map_id, map_name
+            FROM game_map
+            WHERE map_name = $1 AND username = $2`,
+            [map_name, username.toLowerCase()]
+        )
+        const mapExists = response.rows[0];
+        return mapExists;
     }
 
     static async getMapById(mapId) {
@@ -28,6 +39,17 @@ class GameMaps {
         )
         const mapAssets = response.rows[0];
         return mapAssets;
+    }
+
+    static async updateExistingMap(map_name, username, assets) {
+        const response = await db.query(
+            `UPDATE game_map
+            SET map_assets=$1
+            WHERE map_name = $2 AND username = $3`,
+            [assets, map_name, username.toLowerCase()]
+        )
+        const mapExists = response.rows[0];
+        return mapExists;
     }
 
     static async createMap(mapName, username, assets) {
