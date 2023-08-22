@@ -32,7 +32,7 @@ function authenticateJWT(req, res, next) {
  */
 function ensureLoggedIn(req, res, next) {
     try {
-        if(!res.locals.user) throw new UnauthorizedError();
+        if (!res.locals.user) throw new UnauthorizedError();
         return next();
     } catch (err) {
         return next(err);
@@ -53,6 +53,7 @@ function ensureAdmin(req, res, next) {
         return next(err);
     };
 };
+
 
 /** Middleware to use when they must provide a valid token & be user matching
  *  username provided as route param.
@@ -77,5 +78,4 @@ module.exports = {
     ensureLoggedIn,
     ensureAdmin,
     ensureCorrectUserOrAdmin,
-  };
-  
+};
