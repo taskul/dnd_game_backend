@@ -19,9 +19,11 @@ router.get('/:username', ensureLoggedIn, async function (req, res, next) {
     }
 })
 
-router.get('/:map_id', ensureCorrectUserOrAdmin, async function (req, res, next) {
+router.get('/assets/:game_map_id', async function (req, res, next) {
     try {
-        const mapAssets = await GameMaps.getMap(req.params.map_id);
+        console.log(req.params)
+        const mapAssets = await GameMaps.getMapById(req.params.game_map_id);
+        console.log(mapAssets)
         return res.json({ mapAssets });
     } catch (err) {
         return next(err);
@@ -43,5 +45,15 @@ router.post("/create", async function (req, res, next) {
         return next(err);
     };
 });
+
+router.delete("/:game_map_id", async function (req, res, next) {
+    try {
+        const response = await GameMaps.deleteMap(req.params.game_map_id);
+        console.log(response)
+        return res.json({ deleted: response})
+    } catch (err) {
+        return next(err)
+    }
+})
 
 module.exports = router;
