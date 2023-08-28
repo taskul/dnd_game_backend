@@ -11,7 +11,7 @@ CREATE TABLE users (
 
 CREATE TABLE guild (
     guild_id SERIAL PRIMARY KEY,
-    guild_name VARCHAR(30) NOT NULL,
+    guild_name VARCHAR(30) UNIQUE NOT NULL,
     user_id INTEGER
         REFERENCES users ON DELETE CASCADE
 );

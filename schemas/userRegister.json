@@ -25,9 +25,7 @@
       "maxLength": 60,
       "format": "email"
     },
-    "guildToken": {
-      "type":"string"
-    }
+    "guildToken": {}
   },
   "additionalProperties": false,
   "required": [
