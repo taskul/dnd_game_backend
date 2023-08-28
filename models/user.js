@@ -79,7 +79,7 @@ class User {
           email,
           is_admin)
          VALUES ($1, $2, $3, $4, $5, $6)
-         RETURNING username, first_name, last_name, email, is_admin`,
+         RETURNING user_id, username, first_name, last_name, email, is_admin`,
       [
         username.toLowerCase(),
         hashedPassword,
@@ -100,13 +100,14 @@ class User {
  **/
   static async get(username) {
     const userRes = await db.query(
-      `SELECT username,
-                    first_name AS "firstName",
-                    last_name AS "lastName",
-                    email,
-                    is_admin AS "isAdmin"
-             FROM users
-             WHERE username = $1`,
+      `SELECT user_id,
+              username,
+              first_name AS "firstName",
+              last_name AS "lastName",
+              email,
+              is_admin AS "isAdmin"
+        FROM users
+        WHERE username = $1`,
       [username],
     );
 

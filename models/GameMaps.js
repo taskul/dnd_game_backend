@@ -37,7 +37,6 @@ class GameMaps {
             WHERE game_map_id = $1`,
             [mapId]
         )
-        console.log('DB data',response)
         const mapAssets = response.rows[0];
         return mapAssets;
     }
