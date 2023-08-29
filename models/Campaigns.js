@@ -10,14 +10,22 @@ const User = require("./User");
 
 class Campaigns {
 
-    static async getCampaign(guild_id) {
+    static async getCampaign(username) {
         const response = await db.query(
-            `SELECT campaign_id,
-                    campaign_name,
-                    guild_id
-             FROM campaign
-             WHERE guild_id = $1`,
-            [guild_id]
+            `SELECT cm.guild_id,
+                    cm.campaign_owner,
+                    c.campaign_id,
+                    c.campaign_name,
+                    g.guild_name
+            FROM users u
+            JOIN campaign_members cm
+                ON u.user_id = cm.user_id
+            JOIN campaign c
+                ON cm.campaign_id = c.campaign_id
+            JOIN guild g
+                ON cm.guild_id = g.guild_id
+             WHERE u.username = $1`,
+            [username]
         )
 
         const campaigns = response.rows;
@@ -30,7 +38,9 @@ class Campaigns {
                 (campaign_name,
                 guild_id)
             VALUES ($1, $2)
-            RETURNING campaign_name, campaign_id`,
+            RETURNING campaign_id,
+                      campaign_name, 
+                      campaign_id`,
             [campaign_name, guild_id]
         );
         const campaign_id = response.rows[0];

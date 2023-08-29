@@ -9,13 +9,22 @@ const Campaigns = require('../models/Campaigns')
 
 const router = express.Router();
 
-router.get('/')
+router.get('/:username', ensureCorrectUser, async function (req, res, next) {
+    try {
+        let {username} = req.params;
+        console.log(username)
+        const campaigns = await Campaigns.getCampaign(username);
+        return res.json({ campaigns });
+    } catch (err) {
+        return next(err)
+    }
+})
 
 router.post('/create', ensureCorrectUser, async function (req, res, next) {
     try {
         let { campaign_name, guild_id } = req.body;
         const newCampaign = await Campaigns.createCampaign(campaign_name, guild_id);
-        return res.status(201).json({ success: `${newCampaign.campaign_name} campaign has been successfully created` });
+        return res.status(201).json({ newCampaign });
     } catch (err) {
         return next(err)
     };
