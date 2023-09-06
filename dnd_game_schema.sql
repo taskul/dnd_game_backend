@@ -12,6 +12,7 @@ CREATE TABLE users (
 CREATE TABLE guild (
     guild_id SERIAL PRIMARY KEY,
     guild_name VARCHAR(30) UNIQUE NOT NULL,
+    guild_img TEXT,
     user_id INTEGER
         REFERENCES users ON DELETE CASCADE
 );
@@ -92,113 +93,141 @@ CREATE TABLE private_messages (
 );
 
 CREATE TABLE character (
-    character_id SERIAL PRIMARY KEY,
-    character_name VARCHAR(30) NOT NULL,
+    char_id SERIAL PRIMARY KEY,
+    char_name VARCHAR(30) NOT NULL,
     user_id INTEGER
-        REFERENCES users ON DELETE CASCADE,
-    character_class TEXT NOT NULL,
-    level INTEGER NOT NULL,
-    experience_points INTEGER NOT NULL,
-    alignment TEXT NOT NULL
+        REFERENCES users ON DELETE CASCADE
 );
 
+CREATE TABLE character_info (
+    id SERIAL PRIMARY KEY,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
+    char_race TEXT, 
+    char_alignment TEXT, 
+    char_class TEXT,
+    exp_points INTEGER,
+    char_level INTEGER
+);
+
+CREATE TABLE character_avatar (
+    id SERIAL PRIMARY KEY,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
+    img_url TEXT
+);
+
+
 CREATE TABLE character_appearance (
-    character_id INTEGER,
-    race TEXT NOT NULL,
-    age INTEGER NOT NULL,
+    id SERIAL PRIMARY KEY,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
+    age INTEGER,
     height INTEGER,
     weight INTEGER,
     eyes TEXT,
     skin TEXT,
     hair TEXT,
     background TEXT,
-    character_appearance TEXT,
-    PRIMARY KEY (character_id),
-    FOREIGN KEY (character_id) 
-        REFERENCES character (character_id) ON DELETE CASCADE
+    character_appearance TEXT
 );
 
 CREATE TABLE character_base_stats (
-    character_id INTEGER,
-    strength INTEGER NOT NULL,
-    dexterity INTEGER NOT NULL,
-    constitution INTEGER NOT NULL,
-    inteligence INTEGER NOT NULL,
-    wisdom INTEGER NOT NULL,
-    charisma INTEGER NOT NULL,
-    PRIMARY KEY (character_id),
-    FOREIGN KEY (character_id) 
-        REFERENCES character(character_id) ON DELETE CASCADE
+    id SERIAL PRIMARY KEY,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
+    strength INTEGER,
+    dexterity INTEGER,
+    constitution INTEGER,
+    inteligence INTEGER,
+    wisdom INTEGER,
+    charisma INTEGER
+);
+
+CREATE TABLE saving_throws (
+    id SERIAL PRIMARY KEY,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
+    str INTEGER,
+    dex INTEGER,
+    con INTEGER,
+    intel INTEGER,
+    wis INTEGER,
+    cha INTEGER
+);
+
+CREATE TABLE hit_points_armor_class (
+    id SERIAL PRIMARY KEY,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
+    hit_points INTEGER,
+    temp_hit_points INTEGER,
+    armor_class INTEGER,
+    inspiration INTEGER,
+    initiative INTEGER,
+    speed INTEGER,
+    prof_bonus INTEGER,
+    hit_dice TEXT
+);
+
+CREATE TABLE skills (
+    skill_id SERIAL PRIMARY KEY,
+    skill_name TEXT NOT NULL
 );
 
 CREATE TABLE character_skills (
-    character_id INTEGER,
-    skills JSON,
-    saving_throws JSON,
-    PRIMARY KEY (character_id),
-    FOREIGN KEY (character_id) 
-        REFERENCES character(character_id) ON DELETE CASCADE
+    id SERIAL PRIMARY KEY,
+    skill_id INTEGER REFERENCES skills ON DELETE CASCADE,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE
 );
 
-CREATE TABLE character_action_stats (
-    character_id INTEGER,
-    current_hit_points INTEGER NOT NULL,
-    temp_hit_points INTEGER,
-    inspiration INTEGER,
-    proficiency_bonus INTEGER,
-    armor_class INTEGER NOT NULL,
-    initiative INTEGER,
-    speed INTEGER,
-    PRIMARY KEY (character_id),
-    FOREIGN KEY (character_id) 
-        REFERENCES character(character_id) ON DELETE CASCADE
-);
 
 
 CREATE TABLE character_personality (
-    character_id INTEGER,
+    id SERIAL PRIMARY KEY,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
     personality_traits TEXT,
     ideals TEXT,
     bonds TEXT,
     flaws TEXT,
-    features_traits TEXT,
-    PRIMARY KEY (character_id),
-    FOREIGN KEY (character_id) 
-        REFERENCES character(character_id) ON DELETE CASCADE
+    features_traits TEXT
 );
 
 CREATE TABLE character_proficiencies (
-    character_id INTEGER,
-    proficiencies TEXT,
-    languages TEXT,
-    PRIMARY KEY (character_id),
-    FOREIGN KEY (character_id) 
-        REFERENCES character(character_id) ON DELETE CASCADE
+    id SERIAL PRIMARY KEY,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
+    proficiencies TEXT
 );
 
 CREATE TABLE character_equipment (
-    character_id INTEGER,
-    weapons TEXT,
-    armor TEXT,
-    other TEXT,
+    id SERIAL PRIMARY KEY,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
     copper INTEGER,
     silver INTEGER,
     electrum INTEGER,
     gold INTEGER,
     platinum INTEGER,
-    PRIMARY KEY (character_id),
-    FOREIGN KEY (character_id) 
-        REFERENCES character(character_id) ON DELETE CASCADE
+    equipment TEXT
 );
 
-CREATE TABLE character_attack_spells (
-    character_id INTEGER,
-    attacks TEXT,
-    spells TEXT,
-    PRIMARY KEY (character_id),
-    FOREIGN KEY (character_id) 
-        REFERENCES character(character_id) ON DELETE CASCADE
+CREATE TABLE character_weapons (
+    id SERIAL PRIMARY KEY,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
+    weapon1 TEXT,
+    atk_bonus TEXT,
+    damage_type TEXT,
+    weapon2 TEXT,
+    atk_bonus2 TEXT,
+    damage_type2 TEXT,
+    weapon3 TEXT,
+    atk_bonus3 TEXT,
+    damage_type3 TEXT,
+    weapon4 TEXT,
+    atk_bonus4 TEXT,
+    damage_type4 TEXT,
+    weapon5 TEXT,
+    atk_bonus5 TEXT,
+    damage_type5 TEXT
 );
 
+CREATE TABLE character_spells (
+    id SERIAL PRIMARY KEY,
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
+    spells TEXT
+);
 
 

@@ -16,7 +16,8 @@ class Campaigns {
                     cm.campaign_owner,
                     c.campaign_id,
                     c.campaign_name,
-                    g.guild_name
+                    g.guild_name,
+                    g.guild_img
             FROM users u
             JOIN campaign_members cm
                 ON u.user_id = cm.user_id
@@ -62,8 +63,39 @@ class Campaigns {
             );
             const campaign_owner = response.rows[0];
             return campaign_owner;
-        }
+        };
     };
+
+    // deleting campaign
+    static async deleteCampaign(campaign_id, username) {
+
+        const correctUser = await db.query(
+            `SELECT cm.campaign_id,
+                    cm.campaign_owner
+            FROM campaign_members cm
+            JOIN users u
+                ON u.user_id = cm.user_id
+            WHERE cm.campaign_id = $1 AND u.username = $2`,
+            [campaign_id, username]
+        )
+
+        const campaignFound = correctUser.rows[0];
+
+        if (campaignFound) {
+            if (campaignFound.campaign_owner) {
+                const result = await db.query(
+                    `DELETE
+                    FROM campaign
+                    WHERE campaign_id = $1
+                    RETURNING campaign_name`,
+                    [campaignFound.campaign_id]
+                )
+
+                const campaign_name = result.rows[0];
+                return campaign_name;
+            }
+        }
+    }
 };
 
 module.exports = Campaigns;

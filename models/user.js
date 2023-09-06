@@ -24,14 +24,15 @@ class User {
   static async authenticate(username, password) {
     // try to find the user first
     const result = await db.query(
-      `SELECT username,
-                      password,
-                      first_name AS "firstName",
-                      last_name AS "lastName",
-                      email,
-                      is_admin AS "isAdmin"
-               FROM users
-               WHERE username = $1`,
+      `SELECT user_id,
+              username,
+              password,
+              first_name AS "firstName",
+              last_name AS "lastName",
+              email,
+              is_admin AS "isAdmin"
+      FROM users
+      WHERE username = $1`,
       [username.toLowerCase()],
     );
 

@@ -13,6 +13,7 @@ const usersRoutes = require("./routes/users");
 const mapRoutes = require('./routes/maps');
 const guildRoutes = require('./routes/guilds');
 const campaignRoutes = require('./routes/campaigns');
+const characterRoutes = require('./routes/characters')
 
 const morgan = require("morgan");
 
@@ -40,6 +41,7 @@ app.use("/users", usersRoutes);
 app.use('/maps', mapRoutes);
 app.use('/guilds', guildRoutes);
 app.use('/campaigns', campaignRoutes);
+app.use('/characters', characterRoutes);
 
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {

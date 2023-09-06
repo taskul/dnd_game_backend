@@ -27,9 +27,18 @@ router.post("/login", async function (req, res, next) {
       const errs = validator.errors.map(e => e.stack);
       throw new BadRequestError(errs);
     };
-
-    const { username, password } = req.body;
+    // getting a guild token if exists to sign up user for a specific guild
+    const { username, password, guildToken } = req.body;
     const user = await User.authenticate(username, password);
+
+    // if there is a GuildToken, then add user to the guild they were invited to
+    console.log('GUILD TOKEN', guildToken)
+    if (guildToken) {
+      console.log(guildToken)
+      const response = await Guilds.getGuildIdFromToken(guildToken);
+      const newGuildMember = await Guilds.createNewGuildMember(response.guild_id, user.user_id)
+    }
+
     const token = createToken(user);
     return res.json({ token });
   } catch (err) {
@@ -48,11 +57,9 @@ router.post("/login", async function (req, res, next) {
 router.post("/signup", async function (req, res, next) {
   try {
 
-    // getting a guild token from url params to sign up user for a specific guild
-    const {guildToken} = req.body;
-    const {_guildToken} = req.query;
-    
-    let newGuildToken = guildToken || _guildToken;
+    // getting a guild token if exists to sign up user for a specific guild
+    const { guildToken } = req.body;
+
     // validate input fields
     const validator = jsonschema.validate(req.body, userRegisterSchema);
     if (!validator.valid) {
@@ -63,8 +70,8 @@ router.post("/signup", async function (req, res, next) {
     const newUser = await User.signup({ ...req.body, is_admin: false });
 
     // if there is a GuildToken, then add user to the guild they were invited to
-    if (newGuildToken) {
-      const response = await Guilds.getGuildIdFromToken(newGuildToken);
+    if (guildToken) {
+      const response = await Guilds.getGuildIdFromToken(guildToken);
       const newGuildMember = await Guilds.createNewGuildMember(response.guild_id, newUser.user_id)
     }
 
