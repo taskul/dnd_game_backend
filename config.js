@@ -7,6 +7,7 @@ require("dotenv").config();
 const SECRET_KEY = process.env.SECRET_KEY || "dloea031ladfakd#Dx*7D4!hM82P@xtZ8uW";
 
 const PORT = +process.env.PORT || 3001;
+const SOCKET_PORT = +process.env.SOCKET_PORT || 4000;
 const DB_USER = process.env.USERNAME || '';
 const DB_PASS = process.env.PASSWORD || '';
 
@@ -28,6 +29,7 @@ console.log(`postgresql://${DB_USER}:${DB_PASS}@localhost:5432/dnd_game`)
 module.exports = {
     SECRET_KEY,
     PORT,
+    SOCKET_PORT,
     BCRYPT_WORK_FACTOR,
     getDatabaseUri
 }

@@ -105,8 +105,8 @@ CREATE TABLE character_info (
     char_race TEXT, 
     char_alignment TEXT, 
     char_class TEXT,
-    exp_points INTEGER,
-    char_level INTEGER
+    exp_points TEXT,
+    char_level TEXT
 );
 
 CREATE TABLE character_avatar (
@@ -119,9 +119,9 @@ CREATE TABLE character_avatar (
 CREATE TABLE character_appearance (
     id SERIAL PRIMARY KEY,
     char_id INTEGER REFERENCES character ON DELETE CASCADE,
-    age INTEGER,
-    height INTEGER,
-    weight INTEGER,
+    age TEXT,
+    height TEXT,
+    weight TEXT,
     eyes TEXT,
     skin TEXT,
     hair TEXT,
@@ -132,50 +132,60 @@ CREATE TABLE character_appearance (
 CREATE TABLE character_base_stats (
     id SERIAL PRIMARY KEY,
     char_id INTEGER REFERENCES character ON DELETE CASCADE,
-    strength INTEGER,
-    dexterity INTEGER,
-    constitution INTEGER,
-    inteligence INTEGER,
-    wisdom INTEGER,
-    charisma INTEGER
+    strength TEXT,
+    dexterity TEXT,
+    constitution TEXT,
+    intelligence TEXT,
+    wisdom TEXT,
+    charisma TEXT
 );
 
 CREATE TABLE saving_throws (
     id SERIAL PRIMARY KEY,
     char_id INTEGER REFERENCES character ON DELETE CASCADE,
-    str INTEGER,
-    dex INTEGER,
-    con INTEGER,
-    intel INTEGER,
-    wis INTEGER,
-    cha INTEGER
+    str TEXT,
+    dex TEXT,
+    con TEXT,
+    intel TEXT,
+    wis TEXT,
+    cha TEXT
 );
 
 CREATE TABLE hit_points_armor_class (
     id SERIAL PRIMARY KEY,
     char_id INTEGER REFERENCES character ON DELETE CASCADE,
-    hit_points INTEGER,
-    temp_hit_points INTEGER,
-    armor_class INTEGER,
-    inspiration INTEGER,
-    initiative INTEGER,
-    speed INTEGER,
-    prof_bonus INTEGER,
+    hit_points TEXT,
+    temp_hit_points TEXT,
+    armor_class TEXT,
+    inspiration TEXT,
+    initiative TEXT,
+    speed TEXT,
+    prof_bonus TEXT,
     hit_dice TEXT
 );
 
 CREATE TABLE skills (
     skill_id SERIAL PRIMARY KEY,
-    skill_name TEXT NOT NULL
+    char_id INTEGER REFERENCES character ON DELETE CASCADE,
+    acrobatics TEXT,
+    animalHandling TEXT,
+    arcana TEXT,
+    athletics TEXT,
+    deception TEXT,
+    history TEXT,
+    insight TEXT,
+    intimidation TEXT,
+    investigation TEXT,
+    medicine TEXT,
+    nature TEXT,
+    perception TEXT,
+    performance TEXT,
+    persuasion TEXT,
+    religion TEXT,
+    sleightOfHand TEXT,
+    stealth TEXT,
+    survival TEXT
 );
-
-CREATE TABLE character_skills (
-    id SERIAL PRIMARY KEY,
-    skill_id INTEGER REFERENCES skills ON DELETE CASCADE,
-    char_id INTEGER REFERENCES character ON DELETE CASCADE
-);
-
-
 
 CREATE TABLE character_personality (
     id SERIAL PRIMARY KEY,
@@ -196,11 +206,11 @@ CREATE TABLE character_proficiencies (
 CREATE TABLE character_equipment (
     id SERIAL PRIMARY KEY,
     char_id INTEGER REFERENCES character ON DELETE CASCADE,
-    copper INTEGER,
-    silver INTEGER,
-    electrum INTEGER,
-    gold INTEGER,
-    platinum INTEGER,
+    copper TEXT,
+    silver TEXT,
+    electrum TEXT,
+    gold TEXT,
+    platinum TEXT,
     equipment TEXT
 );
 
