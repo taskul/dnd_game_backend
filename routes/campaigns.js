@@ -12,13 +12,13 @@ const router = express.Router();
 router.get('/:username', ensureCorrectUserOrAdmin, async function (req, res, next) {
     try {
         let { username } = req.params;
-        console.log(username)
         const campaigns = await Campaigns.getCampaign(username);
         return res.json({ campaigns });
     } catch (err) {
         return next(err)
     }
 })
+
 
 router.post('/create', ensureLoggedIn, async function (req, res, next) {
     try {
@@ -30,7 +30,7 @@ router.post('/create', ensureLoggedIn, async function (req, res, next) {
     };
 });
 
-router.post('/add_campaign_member/:username', ensureCorrectUserOrAdmin, async function (req, res, next) {
+router.post('/add_campaign_member/:username', ensureLoggedIn, async function (req, res, next) {
     try {
         let { campaign_id, guild_id, owner } = req.body;
         let { username } = req.params;

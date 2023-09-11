@@ -51,6 +51,18 @@ class Campaigns {
     static async addCampaignMember(campaign_id, guild_id, username, owner) {
         const user = await User.get(username);
         if (user) {
+            const checkExistance = await db.query(
+                `SELECT campaign_id
+                FROM campaign_members
+                WHERE user_id = $1`,
+                [user.user_id]
+            )
+
+            // this avoids creating addtional entries for the same users
+            if (checkExistance.rows[0]) {
+                return
+            }
+
             const response = await db.query(
                 `INSERT INTO campaign_members
                     (campaign_id,

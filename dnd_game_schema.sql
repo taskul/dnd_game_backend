@@ -66,6 +66,7 @@ CREATE TABLE game_map_owner (
 CREATE TABLE group_chats (
     chat_id SERIAL PRIMARY KEY,
     chat_name VARCHAR(100) NOT NULL,
+    campaign_id INTEGER REFERENCES campaign ON DELETE CASCADE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -1,13 +1,16 @@
 "use stict";
 
-const app = require("./app");
-const http = require('./app')
-const { PORT, SOCKET_PORT } = require("./config");
 
-app.listen(PORT, function () {
+const { http } = require('./app')
+const { socketIO } = require('./app')
+const { PORT } = require("./config");
+
+
+http.listen(PORT, () => {
     console.log(`Started on http://localhost:${PORT}`);
 });
 
-http.listen(SOCKET_PORT, () => {
-    console.log(`Server listening on ${SOCKET_PORT}`);
+socketIO.listen(4000, () => {
+    console.log(`Started on http://localhost:${4000}`);
 });
+

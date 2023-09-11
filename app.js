@@ -13,7 +13,8 @@ const usersRoutes = require("./routes/users");
 const mapRoutes = require('./routes/maps');
 const guildRoutes = require('./routes/guilds');
 const campaignRoutes = require('./routes/campaigns');
-const characterRoutes = require('./routes/characters')
+const characterRoutes = require('./routes/characters');
+const gameRoutes = require('./routes/messages')
 
 const morgan = require("morgan");
 
@@ -21,14 +22,15 @@ const morgan = require("morgan");
 const path = __dirname + "/views/";
 
 const app = express();
+
+// socket io
 const http = require('http').Server(app);
-// needs to be on it's own port
-// const PORT = 4000
 const socketIO = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:3001"
+        origin: "http://localhost:3000"
     }
 });
+
 
 // need this for specifying location of React build files
 app.use(express.static(path));
@@ -38,12 +40,34 @@ app.use(express.json());
 app.use(morgan("tiny"));
 app.use(authenticateJWT);
 
+
+// ...
+
+const users = {};
+
 socketIO.on('connection', (socket) => {
-    console.log(`⚡: ${socket.id} user just connected!`);
+    console.log('A user connected');
+
     socket.on('disconnect', () => {
-        console.log('🔥: A user disconnected');
+        console.log('User disconnected');
+        // Remove the user from the list of users when they disconnect
+        delete users[socket.id];
+        socketIO.emit('user disconnected', users);
+    });
+
+    socket.on('chat message', (data) => {
+        // Include the username with the message
+        const message = { username: users[socket.id], text: data.message };
+        socketIO.emit('chat message', message);
+    });
+
+    socket.on('set username', (username) => {
+        // Set the username for the user
+        users[socket.id] = username;
+        socketIO.emit('user connected', users);
     });
 });
+
 
 // specifying this for react files
 app.get('/', function (req, res) {
@@ -57,6 +81,7 @@ app.use('/maps', mapRoutes);
 app.use('/guilds', guildRoutes);
 app.use('/campaigns', campaignRoutes);
 app.use('/characters', characterRoutes);
+app.use('/game', gameRoutes);
 
 /** Handle 404 errors -- this matches everything */
 app.use(function (req, res, next) {
@@ -74,4 +99,4 @@ app.use(function (err, req, res, next) {
     });
 });
 
-module.exports = app;
+module.exports = { http, socketIO };
