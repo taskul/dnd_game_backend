@@ -82,7 +82,8 @@ CREATE TABLE group_messages (
     sender_id INTEGER REFERENCES users(user_id),
     chat_id INTEGER REFERENCES group_chats(chat_id),
     message_text TEXT NOT NULL,
-    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    username TEXT REFERENCES users ON DELETE CASCADE
 );
 
 CREATE TABLE private_messages (
