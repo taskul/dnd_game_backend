@@ -12,7 +12,7 @@ const router = express.Router();
 
 // Get Character
 // returns char_id, char_name, user_id
-router.get('/:username', ensureCorrectUserOrAdmin, async function (req, res, next) {
+router.get('/:username', ensureLoggedIn, async function (req, res, next) {
     try {
         const { username } = req.params;
         const response = await Characters.getCharacters(username);
@@ -36,7 +36,7 @@ router.post('/create', ensureLoggedIn, async function (req, res, next) {
 // -----------------------------------------Character Info
 // Get Character info
 // returns char_id, char_race, char_alignment, char_class, exp_points, char_level
-router.get('/info/:char_id/:username', ensureCorrectUserOrAdmin, async function (req, res, next) {
+router.get('/info/:char_id/:username', ensureLoggedIn, async function (req, res, next) {
     try {
         const { char_id, username } = req.params;
         const response = await Characters.getCharactersInfo(char_id);
@@ -78,7 +78,7 @@ router.put('/patch/info/:username', ensureCorrectUserOrAdmin, async function (re
 router.get('/avatar/:char_id', async function (req, res, next) {
     try {
         const { char_id } = req.params;
-        const response = await Characters.getCharacterAvatar(char_id);
+        const response = await Characters.getAvatar(char_id);
         return res.json({ response });
     } catch (err) {
         return next(err);

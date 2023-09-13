@@ -44,27 +44,79 @@ app.use(authenticateJWT);
 // ...
 
 const users = {};
+const rooms = {};
 
 socketIO.on('connection', (socket) => {
     console.log('A user connected');
 
+    // will be used to update chat when user leaves or connections drops
+    // Store a timeout reference for each user
+    // let userTimeout;
+
+    // Function to remove a user when they become inactive
+    const removeInactiveUser = () => {
+        // clearTimeout(userTimeout);
+        const user = users[socket.id];
+
+        if (user) {
+            const { username, room } = user;
+            // Remove the user from the list of users in the specific room
+            if (rooms[room]) {
+                rooms[room] = rooms[room].filter((u) => u !== username);
+                socketIO.to(room).emit('user disconnected', rooms[room]);
+            }
+            delete users[socket.id];
+        }
+    };
+
     socket.on('disconnect', () => {
         console.log('User disconnected');
-        // Remove the user from the list of users when they disconnect
-        delete users[socket.id];
-        socketIO.emit('user disconnected', users);
+        removeInactiveUser();
     });
 
     socket.on('chat message', (data) => {
+        const { message, username, room } = data;
         // Include the username with the message
-        const message = { username: users[socket.id], text: data.message };
-        socketIO.emit('chat message', message);
+        // const message = { username, text: data.message };
+        // socketIO.emit('chat message', message);
+        console.log("MESSAGES", message, username, room)
+        socketIO.to(room).emit('chat message', { message, username });
+    });
+    socket.on('set username', (data) => {
+        const { username, room } = data;
+        // Set the username and room for the user
+        users[socket.id] = { username, room };
+        socket.join(room); // Join the specified room
+        // Add the user to the list of users in the specific room
+        if (!rooms[room]) {
+            rooms[room] = [username];
+        } else if (!rooms[room].includes(username)) {
+            // avoid duplicates of the same user in the chat room
+            rooms[room].push(username);
+        }
+        socketIO.to(room).emit('user connected', rooms[room]);
+
+        // Set a timeout for user inactivity (e.g., 5 minutes)
+        // userTimeout = setTimeout(() => {
+        //     removeInactiveUser();
+        // }, 5 * 60 * 1000); // 5 minutes in milliseconds
     });
 
-    socket.on('set username', (username) => {
-        // Set the username for the user
-        users[socket.id] = username;
-        socketIO.emit('user connected', users);
+    socket.on('get map', (data) => {
+        const { map_id, map_name, room } = data;
+        console.log(data)
+        socketIO.to(room).emit('get map', { map_id, map_name })
+    })
+
+    // Add a 'leave room' event if needed
+    socket.on('leave room', (room) => {
+        socket.leave(room);
+    });
+
+    socket.on('join room', (room) => {
+        // Join the specified room
+        socket.join(room);
+        socket.emit('room joined', room);
     });
 });
 

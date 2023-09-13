@@ -75,6 +75,7 @@ class Messages {
         }
     };
 
+
     static async getChatRoomParticipants(chat_id, username) {
         const user = await User.get(username);
         if (user) {
@@ -90,6 +91,55 @@ class Messages {
         };
     };
 
+    // Chat room characters
+    static async createChatCharacter(chat_id, char_id, char_name, username) {
+        const response = await db.query(
+            `INSERT INTO group_chats_characters
+                        (chat_id,
+                         char_id,
+                         char_name,
+                         username)
+            VALUES ($1, $2, $3, $4)
+            RETURNING chat_id,
+                      char_id`,
+            [chat_id, char_id, char_name, username]
+        );
+        const chat_character = response.rows[0];
+        return chat_character;
+    };
+
+    // Update chat character
+    static async updateChatCharacter(chat_id, char_id, char_name, username) {
+        const response = await db.query(
+            `UPDATE group_chats_characters
+                SET char_id = $1,
+                SET char_name = $2
+                WHERE chat_id = $3 AND username = $4
+                RETURNING char_id`,
+            [char_id, char_name, chat_id, username]
+        )
+
+        const updatedCharacter = response.rows[0];
+        return updatedCharacter;
+    }
+
+    static async getChatCharacter(chat_id, username) {
+        const user = await User.get(username);
+        if (user) {
+            const response = await db.query(
+                `SELECT chat_id,
+                        char_id,
+                        char_name,
+                        username
+                FROM group_chats_characters
+                WHERE chat_id = $1 AND username = $2`,
+                [chat_id, username]
+            );
+            const character = response.rows[0];
+            return character;
+        }
+    };
+
     static async createMessages(chat_id, username, message) {
         const user = await User.get(username);
         if (user) {
@@ -97,10 +147,10 @@ class Messages {
                 `INSERT INTO group_messages
                             (sender_id,
                             chat_id,
-                            message_text,
+                            message,
                             username)
                 VALUES ($1, $2, $3, $4)
-                RETURNING message_text`,
+                RETURNING message`,
                 [user.user_id, chat_id, message, username]
             );
             const newMessage = response.rows[0];
@@ -115,7 +165,7 @@ class Messages {
                 `SELECT sender_id,
                             username,
                             chat_id,
-                            message_text
+                            message
                     FROM group_messages
                     WHERE chat_id = $1`,
                 [chat_id,]

@@ -81,9 +81,17 @@ CREATE TABLE group_messages (
     message_id SERIAL PRIMARY KEY,
     sender_id INTEGER REFERENCES users(user_id),
     chat_id INTEGER REFERENCES group_chats(chat_id),
-    message_text TEXT NOT NULL,
+    message TEXT,
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     username TEXT REFERENCES users ON DELETE CASCADE
+);
+
+CREATE TABLE group_chats_characters (
+    id SERIAL PRIMARY KEY,
+    chat_id INTEGER REFERENCES group_chats(chat_id),
+    char_id INTEGER REFERENCES character(char_id),
+    username TEXT REFERENCES users(username),
+    char_name TEXT
 );
 
 CREATE TABLE private_messages (
