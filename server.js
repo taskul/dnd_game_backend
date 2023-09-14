@@ -10,7 +10,7 @@ http.listen(PORT, () => {
     console.log(`Started on http://localhost:${PORT}`);
 });
 
-socketIO.listen(4000, () => {
-    console.log(`Started on http://localhost:${4000}`);
-});
+// socketIO.listen(4000, () => {
+//     console.log(`Started on http://localhost:${4000}`);
+// });
 
