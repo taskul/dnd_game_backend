@@ -23,7 +23,7 @@ function getDatabaseUri() {
 // WJB: Evaluate in 2021 if this should be increased to 13 for non-test use
 const BCRYPT_WORK_FACTOR = process.env.NODE_ENV === "test" ? 1 : 12;
 
-console.log(`postgresql://${DB_USER}:${DB_PASS}@localhost:5432/dnd_game`)
+
 
 module.exports = {
     SECRET_KEY,
