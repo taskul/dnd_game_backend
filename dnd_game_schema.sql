@@ -83,7 +83,7 @@ CREATE TABLE group_messages (
     chat_id INTEGER REFERENCES group_chats(chat_id),
     message TEXT,
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    username TEXT REFERENCES users ON DELETE CASCADE
+    username TEXT REFERENCES users(username) ON DELETE CASCADE
 );
 
 CREATE TABLE group_chats_characters (
