@@ -27,27 +27,29 @@ const app = express();
 const http = require('http').Server(app);
 const socketIO = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:3000",
-        credentials: true
+        origin: ['http://localhost:3000', 'https://dnd-game.onrender.com/'],
+        methods: ["GET", "POST"],
+        credentials: true,
     }
 });
 
-const corsOptions = {
-    origin: ['http://localhost:3000', 'https://dnd-game.onrender.com/'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Enable cookies or authorization headers
-};
+// const corsOptions = {
+//     origin: ['http://localhost:3000', 'https://dnd-game.onrender.com/'],
+//     methods: ["GET", "POST"],
+//     credentials: true, // Enable cookies or authorization headers
+// };
 
 // need this for specifying location of React build files
 app.use(express.static(path));
 
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://dnd-game.onrender.com');
-    // Add other necessary CORS headers like methods and headers here if needed.
-    next();
-});
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', 'https://dnd-game.onrender.com');
+//     // Add other necessary CORS headers like methods and headers here if needed.
+//     next();
+// });
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(authenticateJWT);
