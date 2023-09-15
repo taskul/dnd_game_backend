@@ -64,11 +64,12 @@ class User {
       `SELECT username
          FROM users
          WHERE username = $1`,
-      [username.toLowerCase()],
+      [username.toLowerCase()]
     );
 
     console.log("DUPLICATE", duplicateCheck.rows[0])
     if (duplicateCheck.rows[0]) {
+      console.log("ERROR INSIDE ERROR")
       throw new BadRequestError(`Duplicate username: ${username}`);
     }
 
@@ -93,7 +94,7 @@ class User {
         last_name,
         email,
         is_admin,
-      ],
+      ]
     );
 
     const user = result.rows[0];
