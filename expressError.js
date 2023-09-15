@@ -4,7 +4,7 @@
  *  The error-handling middleware will return this.
  */
 
-class ExpressError extends Error {
+module.exports.ExpressError = class ExpressError extends Error {
     constructor(message, status) {
         super();
         this.message = message;
@@ -14,7 +14,7 @@ class ExpressError extends Error {
 
 /** 404 NOT FOUND error. */
 
-class NotFoundError extends ExpressError {
+module.exports.NotFoundError = class NotFoundError extends ExpressError {
     constructor(message = "Not Found") {
         super(message, 404);
     };
@@ -22,7 +22,7 @@ class NotFoundError extends ExpressError {
 
 /** 401 UNAUTHORIZED error. */
 
-class UnauthorizedError extends ExpressError {
+module.exports.UnauthorizedError = class UnauthorizedError extends ExpressError {
     constructor(message = "Unauthorized") {
         super(message, 401);
     };
@@ -35,7 +35,7 @@ class UnauthorizedError extends ExpressError {
 //         super(message, 400);
 //     };
 // };
-class BadRequestError extends Error {
+module.exports.BadRequestError = class BadRequestError extends Error {
     constructor(message) {
         super(message);
         this.name = 'BadRequestError';
@@ -45,16 +45,16 @@ class BadRequestError extends Error {
 
 /** 403 BAD REQUEST error. */
 
-class ForbiddenError extends ExpressError {
+module.exports.ForbiddenError = class ForbiddenError extends ExpressError {
     constructor(message = "Bad Request") {
         super(message, 403)
     }
 }
 
-module.exports = {
-    ExpressError,
-    NotFoundError,
-    UnauthorizedError,
-    BadRequestError,
-    ForbiddenError,
-};
+// module.exports = {
+//     ExpressError,
+//     NotFoundError,
+//     UnauthorizedError,
+//     BadRequestError,
+//     ForbiddenError,
+// };
