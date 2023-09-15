@@ -8,6 +8,7 @@ const {
   BadRequestError,
   UnauthorizedError,
 } = require("../expressError");
+require("dotenv").config();
 
 const { BCRYPT_WORK_FACTOR } = require("../config");
 
@@ -58,6 +59,9 @@ class User {
   **/
   static async signup(
     { username, password, first_name, last_name, email, is_admin }) {
+
+    console.log("DB INSTANCE", db)
+    console.log("DATABASE CAN YOU SEE", process.env.DATABASE_URL)
 
     console.log("DB GETTING DATA", username, password, first_name, last_name, email, is_admin)
     const duplicateCheck = await db.query(
