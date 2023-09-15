@@ -14,10 +14,10 @@ require("dotenv").config(); // testing client
 
 db = new Client({
     user: process.env.USERNAME,
-    host: 'localhost',
-    database: 'dnd_game',
+    host: process.env.HOST,
+    database: process.env.DB_NAME,
     password: process.env.PASSWORD,
-    port: 5432,
+    port: process.env.DB_PORT,
 })
 
 db.connect();
