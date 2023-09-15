@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const { sqlForPartialUpdate } = require("../helpers/sql");
 const {
   NotFoundError,
-  BadRequesetError,
+  BadRequestError,
   UnauthorizedError,
 } = require("../expressError");
 
