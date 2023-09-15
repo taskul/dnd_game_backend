@@ -25,7 +25,7 @@ router.post("/login", async function (req, res, next) {
     const validator = jsonschema.validate(req.body, userAuthSchema);
     if (!validator.valid) {
       const errs = validator.errors.map(e => e.stack);
-      throw new Error('BROKEN', errs)
+      throw new BadRequestError(errs);
     };
     // getting a guild token if exists to sign up user for a specific guild
     const { username, password, guildToken } = req.body;
@@ -64,7 +64,7 @@ router.post("/signup", async function (req, res, next) {
     const validator = jsonschema.validate(req.body, userRegisterSchema);
     if (!validator.valid) {
       const errs = validator.errors.map(e => e.stack);
-      throw new Error('BROKEN', errs)
+      throw new BadRequestError(errs);
     }
 
     const newUser = await User.signup({ ...req.body, is_admin: false });
