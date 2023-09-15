@@ -8,6 +8,8 @@ const {
   BadRequestError,
   UnauthorizedError,
 } = require("../expressError");
+
+
 require("dotenv").config();
 
 const { BCRYPT_WORK_FACTOR } = require("../config");
@@ -39,6 +41,9 @@ class User {
 
     const user = result.rows[0];
 
+    const selectNOw = await db.query('SELECT NOW()')
+    console.log("SELECT NOW", selectNOw)
+
     if (user) {
       // compare hashed password to a new hash from password
       const isValid = await bcrypt.compare(password, user.password);
@@ -62,6 +67,9 @@ class User {
 
     console.log("DB INSTANCE", db)
     console.log("DATABASE CAN YOU SEE", process.env.DATABASE_URL)
+
+    const selectNOw = await db.query('SELECT NOW()')
+    console.log("SELECT NOW", selectNOw)
 
     console.log("DB GETTING DATA", username, password, first_name, last_name, email, is_admin)
     const duplicateCheck = await db.query(
