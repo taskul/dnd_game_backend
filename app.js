@@ -32,11 +32,10 @@ const socketIO = require('socket.io')(http, {
     }
 });
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
 const corsOptions = {
-    origin: allowedOrigins,
+    origin: ['http://localhost:3000', 'https://dnd-game.onrender.com/'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+    credentials: true, // Enable cookies or authorization headers
 };
 
 // need this for specifying location of React build files
