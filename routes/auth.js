@@ -59,7 +59,7 @@ router.post("/signup", async function (req, res, next) {
 
     // getting a guild token if exists to sign up user for a specific guild
     const { guildToken } = req.body;
-
+    console.log("BODY", req.body)
     // validate input fields
     const validator = jsonschema.validate(req.body, userRegisterSchema);
     if (!validator.valid) {
