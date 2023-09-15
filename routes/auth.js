@@ -64,10 +64,15 @@ router.post("/signup", async function (req, res, next) {
     const validator = jsonschema.validate(req.body, userRegisterSchema);
     if (!validator.valid) {
       const errs = validator.errors.map(e => e.stack);
+      console.log("ERRORS", errs)
       throw new BadRequestError(errs);
     }
 
+    console.log("VALIDATOR", validator)
+
     const newUser = await User.signup({ ...req.body, is_admin: false });
+
+    console.log("NEW USER", newUser)
 
     // if there is a GuildToken, then add user to the guild they were invited to
     if (guildToken) {

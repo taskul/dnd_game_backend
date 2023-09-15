@@ -58,6 +58,8 @@ class User {
   **/
   static async signup(
     { username, password, first_name, last_name, email, is_admin }) {
+
+    console.log("DB GETTING DATA", username, password, first_name, last_name, email, is_admin)
     const duplicateCheck = await db.query(
       `SELECT username
          FROM users
