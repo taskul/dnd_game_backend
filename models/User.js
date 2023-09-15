@@ -67,12 +67,15 @@ class User {
       [username.toLowerCase()],
     );
 
+    console.log("DUPLICATE", duplicateCheck.rows[0])
     if (duplicateCheck.rows[0]) {
       throw new BadRequestError(`Duplicate username: ${username}`);
     }
 
+    console.log("BCRYPT", BCRYPT_WORK_FACTOR)
     const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
+    console.log("HASHEDP", hashedPassword)
     const result = await db.query(
       `INSERT INTO users
          (username,
@@ -94,7 +97,7 @@ class User {
     );
 
     const user = result.rows[0];
-
+    console.log("USER IN DB", user)
     return user;
   }
 
