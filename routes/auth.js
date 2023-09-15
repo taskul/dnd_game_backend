@@ -64,7 +64,7 @@ router.post("/signup", async function (req, res, next) {
     const validator = jsonschema.validate(req.body, userRegisterSchema);
     if (!validator.valid) {
       const errs = validator.errors.map(e => e.stack);
-      throw new BadRequestError(errs);
+      throw new Error('BROKEN', errs)
     }
 
     const newUser = await User.signup({ ...req.body, is_admin: false });
