@@ -83,6 +83,7 @@ router.post("/signup", async function (req, res, next) {
     const token = createToken(newUser);
     return res.status(201).json({ token });
   } catch (err) {
+    console.log("AUTH ROUTES ERRORS", err)
     return next(err);
   }
 });
