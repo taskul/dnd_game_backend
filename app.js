@@ -41,6 +41,12 @@ const corsOptions = {
 // need this for specifying location of React build files
 app.use(express.static(path));
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://dnd-game.onrender.com');
+    // Add other necessary CORS headers like methods and headers here if needed.
+    next();
+});
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan("tiny"));
