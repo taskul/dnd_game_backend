@@ -32,11 +32,17 @@ const socketIO = require('socket.io')(http, {
     }
 });
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS.split(',');
+const corsOptions = {
+    origin: allowedOrigins,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+};
 
 // need this for specifying location of React build files
 app.use(express.static(path));
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(authenticateJWT);
