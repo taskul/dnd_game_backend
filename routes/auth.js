@@ -25,7 +25,7 @@ router.post("/login", async function (req, res, next) {
     const validator = jsonschema.validate(req.body, userAuthSchema);
     if (!validator.valid) {
       const errs = validator.errors.map(e => e.stack);
-      throw new BadRequestError(errs);
+      throw new Error('BROKEN', errs)
     };
     // getting a guild token if exists to sign up user for a specific guild
     const { username, password, guildToken } = req.body;
