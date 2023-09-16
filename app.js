@@ -133,9 +133,17 @@ socketIO.on('connection', (socket) => {
 
 
 // specifying this for react files
-app.get('/', function (req, res) {
+app.get('/*', function (req, res) {
     res.sendFile(path + "index.html");
 });
+
+// app.get('/*', function(req, res) {
+//     res.sendFile(path.join(__dirname, 'path/to/your/index.html'), function(err) {
+//       if (err) {
+//         res.status(500).send(err)
+//       }
+//     })
+//   })
 
 // routes
 app.use("/auth", authRoutes);
