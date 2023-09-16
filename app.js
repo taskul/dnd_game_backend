@@ -133,18 +133,9 @@ socketIO.on('connection', (socket) => {
 
 
 // specifying this for react files
-// app.get('/', function (req, res) {
-//     res.sendFile(path + "index.html");
-// });
-
-app.get("/*", function (req, res) {
-    res.sendFile(path.join(__dirname, "dist/index.html"), function (err) {
-        if (err) {
-            res.status(500).send(err);
-        }
-    });
+app.get('/', function (req, res) {
+    res.sendFile(path + "index.html");
 });
-
 
 
 // routes
