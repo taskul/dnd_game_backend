@@ -19,3 +19,8 @@ beforeAll(commonBeforeAll);
 beforeEach(commonBeforeEach);
 afterEach(commonAfterEach);
 afterAll(commonAfterAll);
+
+// ---------------------------GUILDS
+// descrive("create new guild", function () {
+//     test("works", async function ())
+// })
