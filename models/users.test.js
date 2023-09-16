@@ -92,21 +92,21 @@ describe("register", function () {
         expect(found.rows[0].password.startsWith("$2b$")).toEqual(true);
     });
 
-    // test("bad request with dup data", async function () {
-    //     try {
-    //         await User.signup({
-    //             ...newUser,
-    //             password: "password",
-    //         });
-    //         await User.signup({
-    //             ...newUser,
-    //             password: "password",
-    //         });
-    //         fail();
-    //     } catch (err) {
-    //         expect(err instanceof BadRequestError).toBeTruthy();
-    //     }
-    // });
+    test("bad request with dup data", async function () {
+        try {
+            await User.signup({
+                ...newUser,
+                password: "password",
+            });
+            await User.signup({
+                ...newUser,
+                password: "password",
+            });
+            fail();
+        } catch (err) {
+            expect(err instanceof BadRequestError).toBeTruthy();
+        }
+    });
 });
 
 

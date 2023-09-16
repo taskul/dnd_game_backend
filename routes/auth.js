@@ -32,9 +32,7 @@ router.post("/login", async function (req, res, next) {
     const user = await User.authenticate(username, password);
 
     // if there is a GuildToken, then add user to the guild they were invited to
-    console.log('GUILD TOKEN', guildToken)
     if (guildToken) {
-      console.log(guildToken)
       const response = await Guilds.getGuildIdFromToken(guildToken);
       const newGuildMember = await Guilds.createNewGuildMember(response.guild_id, user.user_id)
     }
@@ -59,20 +57,14 @@ router.post("/signup", async function (req, res, next) {
 
     // getting a guild token if exists to sign up user for a specific guild
     const { guildToken } = req.body;
-    console.log("BODY", req.body)
     // validate input fields
     const validator = jsonschema.validate(req.body, userRegisterSchema);
     if (!validator.valid) {
       const errs = validator.errors.map(e => e.stack);
-      console.log("ERRORS", errs)
       throw new BadRequestError(errs);
     }
 
-    console.log("VALIDATOR", validator)
-
     const newUser = await User.signup({ ...req.body, is_admin: false });
-
-    console.log("NEW USER", newUser)
 
     // if there is a GuildToken, then add user to the guild they were invited to
     if (guildToken) {
@@ -83,7 +75,6 @@ router.post("/signup", async function (req, res, next) {
     const token = createToken(newUser);
     return res.status(201).json({ token });
   } catch (err) {
-    console.log("AUTH ROUTES ERRORS", err)
     return next(err);
   }
 });

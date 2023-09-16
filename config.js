@@ -13,12 +13,9 @@ const DB_PASS = process.env.PASSWORD || '';
 
 // Use dev database, testing database, or via env var, production database
 function getDatabaseUri() {
-    console.log(process.env.DATABASE_URL)
-    return process.env.DATABASE_URL || `postgresql://${DB_USER}:${DB_PASS}@localhost:5432/dnd_game`
-    // (process.env.NODE_ENV === "test")
-    // ? `postgresql://${DB_USER}:${DB_PASS}@localhost:5432/dnd_game_test`
-    // : process.env.DATABASE_URL || `postgresql://${DB_USER}:${DB_PASS}@localhost:5432/dnd_game`
-
+    return (process.env.NODE_ENV === "test")
+        ? `postgresql://${DB_USER}:${DB_PASS}@localhost:5432/dnd_game_test`
+        : process.env.DATABASE_URL || `postgresql://${DB_USER}:${DB_PASS}@localhost:5432/dnd_game`
 }
 
 // Speed up bcrypt during tests, since the algorithm safety isn't being tested

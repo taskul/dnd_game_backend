@@ -10,8 +10,6 @@ const {
 } = require("../expressError");
 
 
-require("dotenv").config();
-
 const { BCRYPT_WORK_FACTOR } = require("../config");
 
 /** Related functions for users. */
@@ -41,9 +39,6 @@ class User {
 
     const user = result.rows[0];
 
-    const selectNOw = await db.query('SELECT NOW()')
-    console.log("SELECT NOW", selectNOw)
-
     if (user) {
       // compare hashed password to a new hash from password
       const isValid = await bcrypt.compare(password, user.password);
@@ -65,13 +60,6 @@ class User {
   static async signup(
     { username, password, first_name, last_name, email, is_admin }) {
 
-    console.log("DB INSTANCE", db)
-    console.log("DATABASE CAN YOU SEE", process.env.DATABASE_URL)
-
-    const selectNOw = await db.query('SELECT NOW()')
-    console.log("SELECT NOW", selectNOw)
-
-    console.log("DB GETTING DATA", username, password, first_name, last_name, email, is_admin)
     const duplicateCheck = await db.query(
       `SELECT username
          FROM users
@@ -79,16 +67,12 @@ class User {
       [username.toLowerCase()]
     );
 
-    console.log("DUPLICATE", duplicateCheck.rows[0])
     if (duplicateCheck.rows[0]) {
-      console.log("ERROR INSIDE ERROR")
       throw new BadRequestError(`Duplicate username: ${username}`);
     }
 
-    console.log("BCRYPT", BCRYPT_WORK_FACTOR)
     const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
 
-    console.log("HASHEDP", hashedPassword)
     const result = await db.query(
       `INSERT INTO users
          (username,
@@ -110,7 +94,6 @@ class User {
     );
 
     const user = result.rows[0];
-    console.log("USER IN DB", user)
     return user;
   }
 

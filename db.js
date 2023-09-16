@@ -7,18 +7,19 @@ const { getDatabaseUri } = require("./config");
 let db;
 require("dotenv").config(); // testing client
 
-// db = new Client({
-//     connectionString: getDatabaseUri()
-// })
-// db.connect();
-
+// use getDatabaseUri() when testing
 db = new Client({
-    user: process.env.USERNAME,
-    host: process.env.HOST,
-    database: process.env.DB_NAME,
-    password: process.env.PASSWORD,
-    port: process.env.DB_PORT,
+    connectionString: getDatabaseUri()
 })
+db.connect();
+
+// db = new Client({
+//     user: process.env.USERNAME,
+//     host: process.env.HOST,
+//     database: process.env.DB_NAME,
+//     password: process.env.PASSWORD,
+//     port: process.env.DB_PORT,
+// })
 
 db.connect();
 

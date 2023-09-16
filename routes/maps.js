@@ -16,7 +16,7 @@ router.get('/:username', ensureCorrectUserOrAdmin, async function (req, res, nex
         return res.json({ response });
     } catch (err) {
         return next(err);
-    }   
+    }
 })
 
 router.get('/assets/:game_map_id/:username', ensureCorrectUserOrAdmin, async function (req, res, next) {
@@ -50,7 +50,6 @@ router.delete("/:game_map_id/:username", ensureCorrectUserOrAdmin, async functio
     try {
         const { game_map_id } = req.params
         const response = await GameMaps.deleteMap(game_map_id);
-        console.log(response)
         return res.json({ deleted: response })
     } catch (err) {
         return next(err)
