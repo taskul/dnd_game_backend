@@ -92,7 +92,6 @@ socketIO.on('connection', (socket) => {
         // Include the username with the message
         // const message = { username, text: data.message };
         // socketIO.emit('chat message', message);
-        console.log("MESSAGES", message, username, room)
         socketIO.to(room).emit('chat message', { message, username });
     });
     socket.on('set username', (data) => {
@@ -117,7 +116,6 @@ socketIO.on('connection', (socket) => {
 
     socket.on('get map', (data) => {
         const { map_id, map_name, room } = data;
-        console.log(data)
         socketIO.to(room).emit('get map', { map_id, map_name })
     })
 
