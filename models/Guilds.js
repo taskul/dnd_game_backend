@@ -81,17 +81,31 @@ class Guilds {
 
     // creating a new Guild member
     static async createNewGuildMember(guild_id, user_id) {
-        const response = await db.query(
-            `INSERT INTO guild_users
-                (guild_id,
-                user_id,
-                guild_owner,
-                joined)
-            VALUES ($1, $2, $3, $4)
-            RETURNING guild_id`,
-            [guild_id, user_id, false, true]
+        // check for duplicates
+        const duplicateCheck = await db.query(
+            `SELECT guild_id,
+                    user_id
+            FROM guild_users
+            WHERE guild_id = $1 AND user_id = $2`,
+            [guild_id, user_id]
         )
-    }
+
+        if (!duplicateCheck.rows[0]) {
+            const response = await db.query(
+                `INSERT INTO guild_users
+                    (guild_id,
+                    user_id,
+                    guild_owner,
+                    joined)
+                VALUES ($1, $2, $3, $4)
+                RETURNING guild_id`,
+                [guild_id, user_id, false, true]
+            );
+
+            const guildId = response.rows[0];
+            return guildId;
+        };
+    };
 
     // used for inviting other users to join the specific guild
     static async createGuildInvite(guild_token, guild_id) {
