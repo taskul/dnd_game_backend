@@ -1,6 +1,6 @@
 # DND game backend
 
-![image of a dragon]([public/dragon_resized.png](https://github.com/taskul/dnd_front_end/blob/6130307f9b61daeafd86ccac6cd158e780202e3e/public/dragon_resized.png)https://github.com/taskul/dnd_front_end/blob/6130307f9b61daeafd86ccac6cd158e780202e3e/public/dragon_resized.png)
+![image of a dragon]([https://github.com/taskul/dnd_front_end/blob/6130307f9b61daeafd86ccac6cd158e780202e3e/public/dragon_resized.png)https://github.com/taskul/dnd_front_end/blob/6130307f9b61daeafd86ccac6cd158e780202e3e/public/dragon_resized.png])
 
 # Running the project
 `node server.js` and developer mode `nodemon server.js`
