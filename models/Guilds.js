@@ -52,30 +52,40 @@ class Guilds {
         const response = await User.get(username);
         if (response) {
             const user_id = response.user_id;
-            const result = await db.query(
-                `INSERT INTO guild
-                    (guild_name,
-                     guild_img,
-                     user_id)
-                VALUES ($1, $2, $3)
-                RETURNING guild_id`,
-                [guild_name, guild_img, user_id]
+
+            const checkDuplicate = await db.query(
+                `SELECT guild_name
+                 FROM guild
+                 WHERE guild_name = $1 AND user_id = $2`,
+                [guild_name, user_id]
             )
 
-            const newGuild = result.rows[0]
+            if (!checkDuplicate.rows[0]) {
+                const result = await db.query(
+                    `INSERT INTO guild
+                        (guild_name,
+                        guild_img,
+                        user_id)
+                    VALUES ($1, $2, $3)
+                    RETURNING guild_id`,
+                    [guild_name, guild_img, user_id]
+                )
 
-            const result2 = await db.query(
-                `INSERT INTO guild_users
-                    (guild_id,
-                    user_id,
-                    guild_owner,
-                    joined)
-                VALUES ($1, $2, $3, $4)
-                RETURNING guild_id`,
-                [newGuild.guild_id, user_id, true, true]
-            )
-            const guildId = result2.rows[0]
-            return guildId;
+                const newGuild = result.rows[0]
+
+                const result2 = await db.query(
+                    `INSERT INTO guild_users
+                        (guild_id,
+                        user_id,
+                        guild_owner,
+                        joined)
+                    VALUES ($1, $2, $3, $4)
+                    RETURNING guild_id`,
+                    [newGuild.guild_id, user_id, true, true]
+                )
+                const guildId = result2.rows[0]
+                return guildId;
+            }
         }
     }
 

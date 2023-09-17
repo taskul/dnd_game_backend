@@ -8,6 +8,7 @@ let db;
 require("dotenv").config(); // testing client
 
 // use getDatabaseUri() when testing
+// because render.com did not work with a db connection string
 // db = new Client({
 //     connectionString: getDatabaseUri()
 // })

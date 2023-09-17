@@ -202,17 +202,27 @@ class Characters {
     static async createCharacter(char_name, username) {
         const user = await User.get(username);
         if (user) {
-            const response = await db.query(
-                `INSERT INTO character
-                    (char_name,
-                     user_id)
-                VALUES ($1, $2)
-                RETURNING char_id, char_name`,
+
+            const checkDuplicate = await db.query(
+                `SELECT char_name
+                 FROM character
+                 WHERE char_name = $1 AND user_id = $2`,
                 [char_name, user.user_id]
             )
 
-            const newChar = response.rows[0];
-            return newChar;
+            if (!checkDuplicate.rows[0]) {
+                const response = await db.query(
+                    `INSERT INTO character
+                        (char_name,
+                        user_id)
+                    VALUES ($1, $2)
+                    RETURNING char_id, char_name`,
+                    [char_name, user.user_id]
+                )
+
+                const newChar = response.rows[0];
+                return newChar;
+            }
         }
     }
 

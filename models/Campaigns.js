@@ -34,18 +34,28 @@ class Campaigns {
     };
 
     static async createCampaign(campaign_name, guild_id) {
-        const response = await db.query(
-            `INSERT INTO campaign
-                (campaign_name,
-                guild_id)
-            VALUES ($1, $2)
-            RETURNING campaign_id,
-                      campaign_name, 
-                      campaign_id`,
+        const checkDuplicate = await db.query(
+            `SELECT campaign_name,
+                    guild_id
+            FROM campaign
+            WHERE campaign_name = $1 AND guild_id = $2`,
             [campaign_name, guild_id]
-        );
-        const campaign_id = response.rows[0];
-        return campaign_id;
+        )
+
+        if (!checkDuplicate.rows[0]) {
+            const response = await db.query(
+                `INSERT INTO campaign
+                    (campaign_name,
+                    guild_id)
+                VALUES ($1, $2)
+                RETURNING campaign_id,
+                        campaign_name, 
+                        campaign_id`,
+                [campaign_name, guild_id]
+            );
+            const campaign_id = response.rows[0];
+            return campaign_id;
+        }
     };
 
     static async addCampaignMember(campaign_id, guild_id, username, owner) {
@@ -54,27 +64,25 @@ class Campaigns {
             const checkExistance = await db.query(
                 `SELECT campaign_id
                 FROM campaign_members
-                WHERE user_id = $1`,
-                [user.user_id]
+                WHERE user_id = $1 AND campaign_id = $2`,
+                [user.user_id, campaign_id]
             )
 
             // this avoids creating addtional entries for the same users
-            if (checkExistance.rows[0]) {
-                return
-            }
-
-            const response = await db.query(
-                `INSERT INTO campaign_members
+            if (!checkExistance.rows[0]) {
+                const response = await db.query(
+                    `INSERT INTO campaign_members
                     (campaign_id,
                     guild_id,
                     user_id,
                     campaign_owner)
                 VALUES ($1, $2, $3, $4)
                 RETURNING campaign_owner`,
-                [campaign_id, guild_id, user.user_id, owner]
-            );
-            const campaign_owner = response.rows[0];
-            return campaign_owner;
+                    [campaign_id, guild_id, user.user_id, owner]
+                );
+                const campaign_owner = response.rows[0];
+                return campaign_owner;
+            };
         };
     };
 
