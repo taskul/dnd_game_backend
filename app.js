@@ -37,10 +37,10 @@ const socketIO = require('socket.io')(http, {
 //     credentials: true, // Enable cookies or authorization headers
 // };
 
+
+
 // need this for specifying location of React build files
 app.use(express.static(path));
-
-
 
 // app.use(cors(corsOptions));
 app.use(cors());
@@ -137,6 +137,11 @@ app.get('/', function (req, res) {
     res.sendFile(path + "index.html");
 });
 
+
+// helping to avoid 404 error on refresh.
+app.get('*', (req, res) => {
+    res.sendFile(path + 'index.html');
+});
 
 // routes
 app.use("/auth", authRoutes);
