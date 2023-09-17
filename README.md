@@ -1,12 +1,11 @@
 # DND game backend
 
-![image of a dragon](https://github.com/taskul/dnd_front_end/blob/6130307f9b61daeafd86ccac6cd158e780202e3e/public/dragon_resized.png)https://github.com/taskul/dnd_front_end/blob/6130307f9b61daeafd86ccac6cd158e780202e3e/public/dragon_resized.png)
+![image of a dragon](https://github.com/taskul/dnd_front_end/blob/6130307f9b61daeafd86ccac6cd158e780202e3e/public/dragon_resized.png)
 
 # Running the project
 `node server.js` and developer mode `nodemon server.js`
 
 ## Dependencies
-`
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -18,7 +17,6 @@
     "pg": "^8.11.2",
     "socket.io": "^4.5.1",
     "supertest": "^6.3.3"
-  `
 
 ### Project Directories
 - helpers - has sql for updating parts of the sql data and tokens.js which helps to create a jwt token
