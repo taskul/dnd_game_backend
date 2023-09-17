@@ -139,7 +139,9 @@ app.get('/', function (req, res) {
 
 
 // helping to avoid 404 error on refresh.
-app.get('*', (req, res) => {
+// Define routes that should serve the 'index.html' file
+const clientRoutes = ['/', '/login', '/signup', '/mapbuilder']; // List of client-side routes
+app.get(clientRoutes, (req, res) => {
     res.sendFile(path + 'index.html');
 });
 
