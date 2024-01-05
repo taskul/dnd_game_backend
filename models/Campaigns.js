@@ -50,7 +50,7 @@ class Campaigns {
                 VALUES ($1, $2)
                 RETURNING campaign_id,
                         campaign_name, 
-                        campaign_id`,
+                        guild_id`,
                 [campaign_name, guild_id]
             );
             const campaign_id = response.rows[0];

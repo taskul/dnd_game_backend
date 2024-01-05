@@ -1,3 +1,6 @@
+-- Running file to update the database
+-- psql dnd_game < dnd_game.sql
+
 DROP DATABASE dnd_game;
 CREATE DATABASE dnd_game;
 \connect dnd_game

@@ -85,6 +85,8 @@ class Guilds {
                 )
                 const guildId = result2.rows[0]
                 return guildId;
+            } else {
+                return;
             }
         }
     }
@@ -161,9 +163,11 @@ class Guilds {
         const result = await db.query(
             `DELETE
                 FROM guild_users
-                WHERE guild_id = $1 AND user_id = $2`,
+                WHERE guild_id = $1 AND user_id = $2
+                RETURNING guild_id`,
             [guild_id, user_id]
         )
+        return result.rows[0];
     }
 
     // deleting the guild

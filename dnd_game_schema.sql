@@ -13,14 +13,13 @@ CREATE TABLE guild (
     guild_id SERIAL PRIMARY KEY,
     guild_name VARCHAR(30) UNIQUE NOT NULL,
     guild_img TEXT,
-    user_id INTEGER
-        REFERENCES users ON DELETE CASCADE
+    user_id INTEGER REFERENCES users(user_id) ON DELETE SET NULL
 );
 
 CREATE TABLE guild_users (
     id SERIAL PRIMARY KEY,
     guild_id INTEGER REFERENCES guild ON DELETE CASCADE,
-    user_id INTEGER REFERENCES users ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users ON DELETE SET NULL,
     guild_owner BOOLEAN NOT NULL DEFAULT FALSE,
     joined BOOLEAN NOT NULL DEFAULT FALSE
 );
@@ -53,14 +52,10 @@ CREATE TABLE game_map (
 );
 
 CREATE TABLE game_map_owner (
-    game_map_id INTEGER,
-    user_id INTEGER,
+    game_map_id INTEGER REFERENCES game_map(game_map_id ) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     map_owner BOOLEAN NOT NULL DEFAULT FALSE,
-    PRIMARY KEY (game_map_id, user_id),
-    FOREIGN KEY (game_map_id) 
-        REFERENCES game_map ON DELETE CASCADE,
-    FOREIGN KEY (user_id) 
-        REFERENCES users ON DELETE CASCADE
+    PRIMARY KEY (game_map_id, user_id)
 );
 
 CREATE TABLE group_chats (
@@ -79,19 +74,11 @@ CREATE TABLE participants (
 
 CREATE TABLE group_messages (
     message_id SERIAL PRIMARY KEY,
-    sender_id INTEGER REFERENCES users(user_id),
-    chat_id INTEGER REFERENCES group_chats(chat_id),
+    sender_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    chat_id INTEGER REFERENCES group_chats(chat_id) ON DELETE CASCADE,
     message TEXT,
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     username TEXT REFERENCES users(username) ON DELETE CASCADE
-);
-
-CREATE TABLE group_chats_characters (
-    id SERIAL PRIMARY KEY,
-    chat_id INTEGER REFERENCES group_chats(chat_id),
-    char_id INTEGER REFERENCES character(char_id),
-    username TEXT REFERENCES users(username),
-    char_name TEXT
 );
 
 CREATE TABLE private_messages (
@@ -107,6 +94,14 @@ CREATE TABLE character (
     char_name VARCHAR(30) NOT NULL,
     user_id INTEGER
         REFERENCES users ON DELETE CASCADE
+);
+
+CREATE TABLE group_chats_characters (
+    id SERIAL PRIMARY KEY,
+    chat_id INTEGER REFERENCES group_chats(chat_id),
+    char_id INTEGER REFERENCES character(char_id),
+    username TEXT REFERENCES users(username),
+    char_name TEXT
 );
 
 CREATE TABLE character_info (
@@ -249,5 +244,7 @@ CREATE TABLE character_spells (
     char_id INTEGER REFERENCES character ON DELETE CASCADE,
     spells TEXT
 );
+
+
 
 
