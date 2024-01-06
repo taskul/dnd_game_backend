@@ -17,9 +17,6 @@ const {
 beforeAll(commonBeforeAll);
 afterAll(commonAfterAll);
 
-// data variables
-let guild_id;
-
 
 async function clearTables() {
     await db.query("DELETE FROM guild");
