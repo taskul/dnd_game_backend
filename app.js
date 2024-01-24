@@ -31,7 +31,6 @@ const http = require('http').Server(app);
 const socketIO = require('socket.io')(http, {
     cors: {
         origin: ORIGIN,
-        credentials: true
     }
 });
 
@@ -47,11 +46,14 @@ app.use(morgan("tiny"));
 app.use(authenticateJWT);
 
 app.use((req, res, next) => {
-    const allowedOrigins = ORIGINS ? ORIGINS.split(',') : "";
+    const allowedOrigins = ORIGINS ? ORIGINS.split(',') : [];
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Origin', origin);
     }
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     next();
 });
 
