@@ -23,19 +23,15 @@ const path = __dirname + "/views/";
 
 const app = express();
 
+const ORIGIN = process.env.ALLOWED_ORIGIN
+
 // socket io
 const http = require('http').Server(app);
 const socketIO = require('socket.io')(http, {
     cors: {
-        origin: '*',
+        origin: ORIGIN,
     }
 });
-
-// const corsOptions = {
-//     origin: ['http://localhost:3000', 'https://dnd-game.onrender.com/'],
-//     methods: ["GET", "POST"],
-//     credentials: true, // Enable cookies or authorization headers
-// };
 
 
 
@@ -49,8 +45,8 @@ app.use(morgan("tiny"));
 app.use(authenticateJWT);
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://dnd-game.onrender.com');
-    // Add other necessary CORS headers like methods and headers here if needed.
+
+    res.setHeader('Access-Control-Allow-Origin', ORIGIN);
     next();
 });
 
