@@ -24,7 +24,7 @@ const path = __dirname + "/views/";
 const app = express();
 
 const ORIGIN = process.env.ALLOWED_ORIGIN
-const ORIGINS = process.env.ALLOWED_ORIGINS.split(',')
+const ORIGINS = process.env.ALLOWED_ORIGINS
 
 // socket io
 const http = require('http').Server(app);
@@ -46,7 +46,7 @@ app.use(morgan("tiny"));
 app.use(authenticateJWT);
 
 app.use((req, res, next) => {
-    const allowedOrigins = ORIGINS;
+    const allowedOrigins = ORIGINS ? ORIGINS.split(',') : "";
     const origin = req.headers.origin;
     if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
