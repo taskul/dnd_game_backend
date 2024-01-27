@@ -87,6 +87,10 @@ socketIO.on('connection', (socket) => {
         }
     };
 
+    socket.on("connect_error", (err) => {
+        console.log(`connect_error due to ${err.message}`);
+      });
+
     socket.on('disconnect', () => {
         console.log('User disconnected');
         removeInactiveUser();
