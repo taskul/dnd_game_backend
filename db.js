@@ -26,11 +26,22 @@ require("dotenv").config(); // testing client
 // })
 
 db = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    user: process.env.DB_USERNAME,
+    host: process.env.HOST,
+    database: process.env.DB_NAME,
+    password: process.env.PASSWORD,
+    port: process.env.DB_PORT,
     ssl: {
-      require: true,
+        sslmode: 'require',
     },
-  });
+})
+
+// db = new Pool({
+//     connectionString: process.env.DATABASE_URL,
+//     ssl: {
+//       require: true,
+//     },
+//   });
 
 db.connect()
 
