@@ -113,7 +113,7 @@ class Messages {
         const response = await db.query(
             `UPDATE group_chats_characters
                 SET char_id = $1,
-                SET char_name = $2
+                    char_name = $2
                 WHERE chat_id = $3 AND username = $4
                 RETURNING char_id`,
             [char_id, char_name, chat_id, username]

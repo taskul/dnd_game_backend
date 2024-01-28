@@ -1,8 +1,7 @@
 "use strict";
 /** Database setup for dnd_game. */
 
-// const { Pool } = require('pg');
-import { Pool } from '@neondatabase/serverless';
+const { Pool } = require('pg');
 require("dotenv").config(); 
 
 
